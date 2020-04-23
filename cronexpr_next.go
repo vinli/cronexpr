@@ -215,9 +215,11 @@ func (expr *Expression) calculateActualDaysOfMonth(year, month int) []int {
 		}
 		// Days of month
 		for v := range expr.daysOfMonth {
-			// Ignore days beyond end of month
 			if v <= lastDayOfMonth.Day() {
 				actualDaysOfMonthMap[v] = true
+			} else {
+				// Last day of month
+				actualDaysOfMonthMap[lastDayOfMonth.Day()] = true
 			}
 		}
 		// Work days of month
