@@ -259,6 +259,28 @@ func TestNextN(t *testing.T) {
 	}
 }
 
+func TestLastDayOfNextMonthNextN(t *testing.T) {
+	expected := []string{
+		"2009-01-31T23:00:00Z",
+		"2009-02-28T23:00:00Z",
+		"2009-03-31T23:00:00Z",
+		"2009-04-30T23:00:00Z",
+	}
+	from, _ := time.Parse(time.RFC3339, "2008-12-31T23:00:00Z")
+	result := MustParse("0 23 31 * *").NextN(from, uint(len(expected)))
+	if len(result) != len(expected) {
+		t.Errorf(`MustParse("0 23 31 * *").NextN("2008-12-31T23:00:00Z", 4):\n"`)
+		t.Errorf(`  Expected %d returned time values but got %d instead`, len(expected), len(result))
+	}
+	for i, next := range result {
+		nextStr := next.Format(time.RFC3339)
+		if nextStr != expected[i] {
+			t.Errorf(`MustParse("0 23 31 * *").NextN("2008-12-31T23:00:00Z", 4):\n"`)
+			t.Errorf(`  result[%d]: expected "%s" but got "%s"`, i, expected[i], nextStr)
+		}
+	}
+}
+
 func TestNextN_every5min(t *testing.T) {
 	expected := []string{
 		"Mon, 2 Sep 2013 08:45:00",
